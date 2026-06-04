@@ -30,7 +30,7 @@ cvvj/
 
 ---
 
-## ⚙️ Installation
+## Installation
 
 ```bash
 # Clone the repository
