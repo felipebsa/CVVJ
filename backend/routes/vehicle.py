@@ -20,7 +20,7 @@ def get_vehicle_id(id: int, db: Session = Depends(get_db)):
 @router.get("/vehicle_active/{active}")
 def get_vehicle_active(active: bool, db: Session = Depends(get_db)):
     db_vehicles = db.query(Vehicle).filter_by(vehicle_active=active).all()
-    if db_vehicles is None:
+    if not db_vehicles:
         raise HTTPException(status_code=404, detail="not vehicles actives")
     vehicles = []
     for db_vehicle in db_vehicles:
