@@ -1,4 +1,5 @@
-from sqlalchemy.orm import Mapped, mapped_column, String
+from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import String
 from database import Base
 
 class Vehicle(Base):
