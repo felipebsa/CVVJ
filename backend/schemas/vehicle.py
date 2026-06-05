@@ -6,3 +6,6 @@ class VehicleSchema(BaseModel):
     vehicle_date: str
     vehicle_plate: str
     vehicle_active: bool
+
+class Active_VehicleSchema(BaseModel):
+    vehicle_active: bool
