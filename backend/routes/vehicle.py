@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from models.vehicle import Vehicle
-from schemas.vehicle import VehicleSchema, Active_VehicleSchema
+from schemas.vehicle import VehicleSchema, VehicleActiveSchema
 from database import get_db
 
 router = APIRouter()
@@ -11,36 +11,36 @@ router = APIRouter()
 def home():
     return {"message": "successful home"}
 
-@router.get("/vehicle_id/{id}")
-def get_vehicle_id(id: int, db: Session = Depends(get_db)):
+@router.get("/vehicles/id/{id}")
+def get_vehicle(id: int, db: Session = Depends(get_db)):
     query = select(Vehicle).where(Vehicle.vehicle_id==id)
     db_vehicle = db.execute(query).scalars().first()
     if db_vehicle is None:
         raise HTTPException(status_code=404, detail="not found id")
     return {"message": db_vehicle}
 
-@router.get("/vehicle_active/{active}")
-def get_vehicle_active(active: bool, db: Session = Depends(get_db)):
-    query = select(Vehicle).where(Vehicle.vehicle_active==active)
+@router.get("/vehicles/actives/{active}")
+def get_vehicle_by_active(active: bool, db: Session = Depends(get_db)):
+    query = select(Vehicle).where(Vehicle.active==active)
     db_vehicles = db.execute(query).scalars().all()
     if not db_vehicles:
         raise HTTPException(status_code=404, detail="not vehicles actives")
     return {"message": db_vehicles}
 
-@router.post("/vehicles_register")
-def post_vehicle(vehicle: VehicleSchema, db: Session = Depends(get_db)):
+@router.post("/vehicles/register")
+def create_vehicle(vehicle: VehicleSchema, db: Session = Depends(get_db)):
     db_vehicle = Vehicle(
-        vehicle_type = vehicle.vehicle_type,
-        vehicle_model = vehicle.vehicle_model,
-        vehicle_date = vehicle.vehicle_date,
-        vehicle_plate = vehicle.vehicle_plate,
-        vehicle_active = vehicle.vehicle_active
+        kind = vehicle.kind,
+        model = vehicle.model,
+        date = vehicle.date,
+        plate = vehicle.plate,
+        active = vehicle.active
     )
     db.add(db_vehicle)
     db.commit()
-    return {"message": "successful post_vehicle"}
+    return {"message": "successful create_vehicle"}
 
-@router.delete("/vehicle_delete/{id}")
+@router.delete("/vehicles/{id}")
 def delete_vehicle(id: int, db: Session = Depends(get_db)):
     query = select(Vehicle).where(Vehicle.vehicle_id==id)
     db_vehicle = db.execute(query).scalars().first()
@@ -50,29 +50,29 @@ def delete_vehicle(id: int, db: Session = Depends(get_db)):
     db.commit()
     return {"message": "successful delete_vehicle"}
 
-@router.put("/vehicle_update/{id}")
-def put_vehicle(id: int, vehicle: VehicleSchema, db: Session = Depends(get_db)):
+@router.put("/vehicles/{id}")
+def update_vehicle(id: int, vehicle: VehicleSchema, db: Session = Depends(get_db)):
     query = select(Vehicle).where(Vehicle.vehicle_id==id)
     db_vehicle = db.execute(query).scalars().first()
     if db_vehicle is None:
         raise HTTPException(status_code=404, detail="not found id")
-    db_vehicle.vehicle_type = vehicle.vehicle_type
-    db_vehicle.vehicle_model = vehicle.vehicle_model
-    db_vehicle.vehicle_plate = vehicle.vehicle_plate
-    db_vehicle.vehicle_date = vehicle.vehicle_date
-    db_vehicle.vehicle_active = vehicle.vehicle_active
+    db_vehicle.kind = vehicle.kind
+    db_vehicle.model = vehicle.model
+    db_vehicle.plate = vehicle.plate
+    db_vehicle.date = vehicle.date
+    db_vehicle.active = vehicle.active
     db.commit()
-    return {"message": "successful put_vehicle"}
+    return {"message": "successful update_vehicle"}
 
-@router.patch("/vehicle_update_active/{id}")
-def patch_vehicle_active(id: int, vehicle: Active_VehicleSchema, db: Session = Depends(get_db)):
+@router.patch("/vehicles/{id}")
+def toggle_vehicle_active(id: int, vehicle: VehicleActiveSchema, db: Session = Depends(get_db)):
     query = select(Vehicle).where(Vehicle.vehicle_id==id)
     db_vehicle = db.execute(query).scalars().first()
     if db_vehicle is None:
         raise HTTPException(status_code=404, detail="not found id")
-    db_vehicle.vehicle_active = vehicle.vehicle_active
+    db_vehicle.active = vehicle.active
     db.commit()
-    return {"message": "successful patch_vehicle"}
+    return {"message": "successful toggle_vehicle"}
 
 
 
