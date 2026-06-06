@@ -9,7 +9,7 @@ from database import get_db
 router = APIRouter()
 
 @router.get("/")
-def home():
+def service_home():
     return {"message": "successful home"}
 
 @router.get("/services/id/{id}")
@@ -33,7 +33,7 @@ def create_service(service: ServicesSchema, db: Session = Depends(get_db)):
     query = select(Vehicle).where(Vehicle.vehicle_id==service.vehicle_id)
     get_query = db.execute(query).scalars().first()
     if get_query is None:
-        raise HTTPException(status_code=404, detail="vehicle id not found")
+        raise HTTPException(status_code=404, detail="service id not found")
     db_service = Service(
         vehicle_id = service.vehicle_id,
         title = service.title,

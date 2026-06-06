@@ -8,7 +8,7 @@ from database import get_db
 router = APIRouter()
 
 @router.get("/")
-def home():
+def vehicle_home():
     return {"message": "successful home"}
 
 @router.get("/vehicles/id/{id}")
