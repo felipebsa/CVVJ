@@ -31,8 +31,8 @@ cvvj/
 │   ├── js/
 │   └── index.html
 ├── .gitignore
-├── requirements.txt
-└── README.md
+├── README.md
+└── requirements.txt
 ```
 
 ---
