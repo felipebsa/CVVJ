@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from models.services import Service
+from models.vehicle import Vehicle
 from schemas.services import ServicesSchema, ServiceFinishSchema
 from database import get_db
 
@@ -29,6 +30,10 @@ def get_finish_services(finish: bool, db: Session = Depends(get_db)):
 
 @router.post("/services/register")
 def create_service(service: ServicesSchema, db: Session = Depends(get_db)):
+    query = select(Vehicle).where(Vehicle.vehicle_id==service.vehicle_id)
+    get_query = db.execute(query).scalars().first()
+    if get_query is None:
+        raise HTTPException(status_code=404, detail="vehicle id not found")
     db_service = Service(
         vehicle_id = service.vehicle_id,
         title = service.title,
@@ -54,7 +59,7 @@ def delete_service(id: int, db: Session = Depends(get_db)):
     return {"message": "successful delete_service"}
 
 @router.put("/services/update/{id}")
-def update_servie(id: int, service: ServicesSchema, db: Session = Depends(get_db)):
+def update_service(id: int, service: ServicesSchema, db: Session = Depends(get_db)):
     query = select(Service).where(Service.service_id==id)
     db_service = db.execute(query).scalars().first()
     if db_service is None:
