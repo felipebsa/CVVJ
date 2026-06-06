@@ -10,3 +10,6 @@ class ServicesSchema(BaseModel):
     parts_value: Optional[float]
     parts_desc: Optional[str]
     finish: bool
+
+class ServiceFinishSchema(BaseModel):
+    finish: bool

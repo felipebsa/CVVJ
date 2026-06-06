@@ -2,14 +2,14 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from models.services import Service
-from schemas.services import ServicesSchema
+from schemas.services import ServicesSchema, ServiceFinishSchema
 from database import get_db
 
 router = APIRouter()
 
 @router.get("/")
 def home():
-    return {"message:" "successful home"}
+    return {"message": "successful home"}
 
 @router.get("/services/id/{id}")
 def get_service(id: int, db: Session = Depends(get_db)):
@@ -19,7 +19,7 @@ def get_service(id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="service id not found")
     return {"message": db_service}
 
-@router.get("services/finish/{finish}")
+@router.get("/services/finish/{finish}")
 def get_finish_services(finish: bool, db: Session = Depends(get_db)):
     query = select(Service).where(Service.finish==finish)
     db_services = db.execute(query).scalars().all()
@@ -30,6 +30,7 @@ def get_finish_services(finish: bool, db: Session = Depends(get_db)):
 @router.post("/services/register")
 def create_service(service: ServicesSchema, db: Session = Depends(get_db)):
     db_service = Service(
+        vehicle_id = service.vehicle_id,
         title = service.title,
         desc = service.desc,
         date = service.date,
@@ -52,7 +53,7 @@ def delete_service(id: int, db: Session = Depends(get_db)):
     db.commit()
     return {"message": "successful delete_service"}
 
-@router.post("/service/update/{id}")
+@router.put("/services/update/{id}")
 def update_servie(id: int, service: ServicesSchema, db: Session = Depends(get_db)):
     query = select(Service).where(Service.service_id==id)
     db_service = db.execute(query).scalars().first()
@@ -69,7 +70,7 @@ def update_servie(id: int, service: ServicesSchema, db: Session = Depends(get_db
     return {"message": "successful update_service"}
 
 @router.patch("/services/{id}")
-def toggle_service_finish(id: int, service: ServicesSchema, db: Session = Depends(get_db)):
+def toggle_service_finish(id: int, service: ServiceFinishSchema, db: Session = Depends(get_db)):
     query = select(Service).where(Service.service_id==id)
     db_service = db.execute(query).scalars().first()
     if db_service is None:
