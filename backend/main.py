@@ -15,3 +15,13 @@ Base.metadata.create_all(bind=engine)
 #include routers
 app.include_router(vehicle_router)
 app.include_router(service_router)
+
+#settings Cors
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
