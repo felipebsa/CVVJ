@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, UploadFile, File
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from models.vehicle import Vehicle
@@ -51,3 +51,22 @@ def delete_image(id: int, db: Session = Depends(get_db)):
     db.delete(db_image)
     db.commit()
     return {"message": "successful delete_image"}
+
+#imagem path
+
+@router.post("/vehicle_images/upload/{vehicle_id}")
+async def upload_image(vehicle_id: int, file: UploadFile = File(), db: Session = Depends(get_db)):
+    contents = await file.read()
+    with open(f"uploads/{file.filename}", "wb") as f:
+        f.write(contents)
+    query = select(Vehicle).where(Vehicle.vehicle_id==vehicle_id)
+    get_query = db.execute(query).scalars().first()
+    if get_query is None:
+        raise HTTPException(status_code=404, detail="not found vehicle id")
+    db_image = Images(
+        vehicle_id = vehicle_id,
+        image_path = f"uploads/{file.filename}"
+    )
+    db.add(db_image)
+    db.commit()
+    return {"message": db_image}
