@@ -9,30 +9,21 @@
 </head>
 <body>
 
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <span class="logo-dot"></span>
       <span>Garagem<br>Placa Preta</span>
     </div>
     <nav class="sidebar-nav">
-      <a href="index.html" class="nav-item active">
-        <i class="ti ti-home"></i> Home
-      </a>
-      <a href="central.html" class="nav-item">
-        <i class="ti ti-layout-grid"></i> Central
-      </a>
-      <a href="status.html" class="nav-item">
-        <i class="ti ti-tool"></i> Status
-      </a>
+      <a href="index.html" class="nav-item active"><i class="ti ti-home"></i> Home</a>
+      <a href="central.html" class="nav-item"><i class="ti ti-layout-grid"></i> Central</a>
+      <a href="servicos.html" class="nav-item"><i class="ti ti-tool"></i> Serviços</a>
+      <a href="status.html" class="nav-item"><i class="ti ti-chart-bar"></i> Status</a>
     </nav>
     <div class="sidebar-footer">v1.0 · interno</div>
   </aside>
 
-  <!-- CONTEÚDO PRINCIPAL -->
   <div class="main">
-
-    <!-- TOPBAR -->
     <header class="topbar">
       <span class="page-title">Home</span>
       <div class="topbar-right">
@@ -42,71 +33,34 @@
       </div>
     </header>
 
-    <!-- CONTEÚDO -->
     <main class="content">
 
-      <!-- HERO -->
-      <div style="
-        background: var(--marrom-escuro);
-        border-radius: 12px;
-        padding: 28px 32px;
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      ">
+      <div style="background: var(--marrom-escuro); border-radius: 12px; padding: 28px 32px; margin-bottom: 22px; display: flex; align-items: center; justify-content: space-between;">
         <div>
-          <h2 style="font-size: 22px; font-weight: 600; color: #f5e6d8; margin-bottom: 6px;">
-            Garagem Placa Preta
-          </h2>
-          <p style="font-size: 13px; color: var(--marrom-claro);">
-            Sistema interno de gestão de veículos
-          </p>
+          <h2 style="font-size: 22px; font-weight: 600; color: #f5e6d8; margin-bottom: 6px;">Garagem Placa Preta</h2>
+          <p style="font-size: 13px; color: var(--marrom-claro);">Sistema interno de gestão de veículos</p>
         </div>
         <i class="ti ti-car" style="font-size: 56px; color: #4a2e1a;"></i>
       </div>
 
-      <!-- ESTATÍSTICAS -->
-      <div class="stats-row" id="stats-row">
-        <div class="stat-card">
-          <div class="stat-label">Total de veículos</div>
-          <div class="stat-val" id="stat-total">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Em serviço</div>
-          <div class="stat-val red" id="stat-servico">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Inativos</div>
-          <div class="stat-val" id="stat-inativos">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Serviços pendentes</div>
-          <div class="stat-val red" id="stat-pendentes">—</div>
-        </div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Total de veículos</div><div class="stat-val" id="stat-total">—</div></div>
+        <div class="stat-card"><div class="stat-label">Em serviço</div><div class="stat-val red" id="stat-servico">—</div></div>
+        <div class="stat-card"><div class="stat-label">Inativos</div><div class="stat-val" id="stat-inativos">—</div></div>
+        <div class="stat-card"><div class="stat-label">Serviços pendentes</div><div class="stat-val red" id="stat-pendentes">—</div></div>
       </div>
 
-      <!-- VEÍCULOS RECENTES -->
       <div class="section-label">Veículos recentes</div>
-      <div id="home-grid" style="
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-        gap: 12px;
-      ">
-        <!-- Preenchido pelo JavaScript -->
-      </div>
+      <div id="home-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px;"></div>
 
     </main>
   </div>
 
-  <!-- MODAL NOVO VEÍCULO -->
   <div class="modal-overlay" id="modal-veiculo">
     <div class="modal">
       <div class="modal-header">
         <span class="modal-title">Novo veículo</span>
-        <button class="modal-close" onclick="fecharModalVeiculo()">
-          <i class="ti ti-x"></i>
-        </button>
+        <button class="modal-close" onclick="fecharModalVeiculo()"><i class="ti ti-x"></i></button>
       </div>
       <div class="modal-body">
         <div class="form-row">
@@ -137,9 +91,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn-outline" onclick="fecharModalVeiculo()">Cancelar</button>
-        <button class="btn-red" onclick="salvarVeiculo()">
-          <i class="ti ti-check"></i> Salvar
-        </button>
+        <button class="btn-red" onclick="salvarVeiculo()"><i class="ti ti-check"></i> Salvar</button>
       </div>
     </div>
   </div>

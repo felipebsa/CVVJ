@@ -9,64 +9,43 @@
 </head>
 <body>
 
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <span class="logo-dot"></span>
       <span>Garagem<br>Placa Preta</span>
     </div>
     <nav class="sidebar-nav">
-      <a href="index.html" class="nav-item">
-        <i class="ti ti-home"></i> Home
-      </a>
-      <a href="central.html" class="nav-item active">
-        <i class="ti ti-layout-grid"></i> Central
-      </a>
-      <a href="status.html" class="nav-item">
-        <i class="ti ti-tool"></i> Status
-      </a>
+      <a href="index.html" class="nav-item"><i class="ti ti-home"></i> Home</a>
+      <a href="central.html" class="nav-item active"><i class="ti ti-layout-grid"></i> Central</a>
+      <a href="servicos.html" class="nav-item"><i class="ti ti-tool"></i> Serviços</a>
+      <a href="status.html" class="nav-item"><i class="ti ti-chart-bar"></i> Status</a>
     </nav>
     <div class="sidebar-footer">v1.0 · interno</div>
   </aside>
 
-  <!-- CONTEÚDO PRINCIPAL -->
   <div class="main">
-
-    <!-- TOPBAR -->
     <header class="topbar">
       <span class="page-title">Central</span>
       <div class="topbar-right">
         <input class="search-input" type="text" id="busca" placeholder="Buscar veículo..." oninput="filtrarCards()" />
-        <button class="btn-red" onclick="abrirModalVeiculo()">
-          <i class="ti ti-plus"></i> Novo veículo
-        </button>
+        <button class="btn-red" onclick="abrirModalVeiculo()"><i class="ti ti-plus"></i> Novo veículo</button>
       </div>
     </header>
 
-    <!-- CONTEÚDO -->
     <main class="content">
 
-      <!-- TOOLBAR DE MODO -->
       <div class="mode-toolbar">
         <span class="mode-label">Modo:</span>
-        <button class="btn-mode" id="btn-edit" onclick="setMode('edit')">
-          <i class="ti ti-pencil"></i> Editar
-        </button>
-        <button class="btn-mode" id="btn-del" onclick="setMode('del')">
-          <i class="ti ti-trash"></i> Apagar
-        </button>
-        <button class="btn-mode" id="btn-none" onclick="setMode('none')" style="color: var(--text-secundario);">
-          <i class="ti ti-x"></i> Cancelar
-        </button>
+        <button class="btn-mode" id="btn-edit" onclick="setMode('edit')"><i class="ti ti-pencil"></i> Editar</button>
+        <button class="btn-mode" id="btn-del" onclick="setMode('del')"><i class="ti ti-trash"></i> Apagar</button>
+        <button class="btn-mode" id="btn-none" onclick="setMode('none')" style="color: var(--text-secundario);"><i class="ti ti-x"></i> Cancelar</button>
       </div>
 
-      <!-- AVISO DE MODO -->
       <div class="warning-bar" id="warning-bar">
         <i class="ti ti-info-circle"></i>
         <span id="warning-text"></span>
       </div>
 
-      <!-- FILTROS -->
       <div class="filters-bar">
         <button class="filter-btn active" onclick="setFiltroAtivo('todos', this)">Todos</button>
         <button class="filter-btn" onclick="setFiltroAtivo('ativos', this)">Ativos</button>
@@ -80,53 +59,34 @@
         </select>
       </div>
 
-      <!-- GRID DE VEÍCULOS -->
-      <div id="central-grid" style="
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        gap: 14px;
-      ">
-        <!-- Preenchido pelo JavaScript -->
-      </div>
+      <div id="central-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px;"></div>
 
     </main>
   </div>
 
-  <!-- MODAL FOTOS DO VEÍCULO -->
+  <!-- MODAL FOTOS -->
   <div class="modal-overlay" id="modal-fotos">
     <div class="modal">
       <div class="modal-header">
         <span class="modal-title" id="modal-fotos-titulo">Fotos do veículo</span>
-        <button class="modal-close" onclick="fecharModalFotos()">
-          <i class="ti ti-x"></i>
-        </button>
+        <button class="modal-close" onclick="fecharModalFotos()"><i class="ti ti-x"></i></button>
       </div>
       <div class="modal-body">
-        <div id="fotos-grid" style="
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 10px;
-          margin-bottom: 14px;
-        ">
-          <!-- Fotos preenchidas pelo JS -->
-        </div>
-        <!-- Upload nova foto -->
+        <div id="fotos-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px;"></div>
         <div style="border-top: 1px solid var(--marrom-borda); padding-top: 14px;">
           <div class="form-group">
-            <label class="form-label">Adicionar foto (caminho)</label>
-            <div style="display: flex; gap: 8px;">
-              <input class="form-input" type="text" id="nova-foto-path" placeholder="Ex: /images/opala_frente.jpg" />
-              <button class="btn-red" onclick="adicionarFoto()">
-                <i class="ti ti-plus"></i>
-              </button>
+            <label class="form-label">Adicionar foto</label>
+            <input type="file" id="nova-foto-file" accept="image/*" style="display: none;" />
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <button class="btn-outline" onclick="document.getElementById('nova-foto-file').click()"><i class="ti ti-photo"></i> Escolher foto</button>
+              <span id="nome-arquivo" style="font-size: 12px; color: var(--text-secundario);">Nenhum arquivo escolhido</span>
+              <button class="btn-red" onclick="adicionarFoto()" style="margin-left: auto;"><i class="ti ti-upload"></i> Enviar</button>
             </div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn-outline" onclick="abrirModalServico()">
-          <i class="ti ti-tool"></i> Registrar serviço
-        </button>
+        <button class="btn-outline" onclick="abrirModalServico()"><i class="ti ti-tool"></i> Registrar serviço</button>
         <button class="btn-outline" onclick="fecharModalFotos()">Fechar</button>
       </div>
     </div>
@@ -137,43 +97,22 @@
     <div class="modal">
       <div class="modal-header">
         <span class="modal-title">Editar veículo</span>
-        <button class="modal-close" onclick="fecharModalEditar()">
-          <i class="ti ti-x"></i>
-        </button>
+        <button class="modal-close" onclick="fecharModalEditar()"><i class="ti ti-x"></i></button>
       </div>
       <div class="modal-body">
         <input type="hidden" id="edit-id" />
         <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Modelo</label>
-            <input class="form-input" type="text" id="edit-model" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Tipo</label>
-            <select class="form-select" id="edit-kind">
-              <option value="Carro">Carro</option>
-              <option value="Moto">Moto</option>
-              <option value="Caminhão">Caminhão</option>
-              <option value="Outros">Outros</option>
-            </select>
-          </div>
+          <div class="form-group"><label class="form-label">Modelo</label><input class="form-input" type="text" id="edit-model" /></div>
+          <div class="form-group"><label class="form-label">Tipo</label><select class="form-select" id="edit-kind"><option value="Carro">Carro</option><option value="Moto">Moto</option><option value="Caminhão">Caminhão</option><option value="Outros">Outros</option></select></div>
         </div>
         <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Ano</label>
-            <input class="form-input" type="text" id="edit-date" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Placa</label>
-            <input class="form-input" type="text" id="edit-plate" />
-          </div>
+          <div class="form-group"><label class="form-label">Ano</label><input class="form-input" type="text" id="edit-date" /></div>
+          <div class="form-group"><label class="form-label">Placa</label><input class="form-input" type="text" id="edit-plate" /></div>
         </div>
       </div>
       <div class="modal-footer">
         <button class="btn-outline" onclick="fecharModalEditar()">Cancelar</button>
-        <button class="btn-red" onclick="salvarEdicao()">
-          <i class="ti ti-check"></i> Salvar
-        </button>
+        <button class="btn-red" onclick="salvarEdicao()"><i class="ti ti-check"></i> Salvar</button>
       </div>
     </div>
   </div>
@@ -183,42 +122,21 @@
     <div class="modal">
       <div class="modal-header">
         <span class="modal-title">Novo veículo</span>
-        <button class="modal-close" onclick="fecharModalVeiculo()">
-          <i class="ti ti-x"></i>
-        </button>
+        <button class="modal-close" onclick="fecharModalVeiculo()"><i class="ti ti-x"></i></button>
       </div>
       <div class="modal-body">
         <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Modelo</label>
-            <input class="form-input" type="text" id="v-model" placeholder="Ex: Opala" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Tipo</label>
-            <select class="form-select" id="v-kind">
-              <option value="Carro">Carro</option>
-              <option value="Moto">Moto</option>
-              <option value="Caminhão">Caminhão</option>
-              <option value="Outros">Outros</option>
-            </select>
-          </div>
+          <div class="form-group"><label class="form-label">Modelo</label><input class="form-input" type="text" id="v-model" placeholder="Ex: Opala" /></div>
+          <div class="form-group"><label class="form-label">Tipo</label><select class="form-select" id="v-kind"><option value="Carro">Carro</option><option value="Moto">Moto</option><option value="Caminhão">Caminhão</option><option value="Outros">Outros</option></select></div>
         </div>
         <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Ano</label>
-            <input class="form-input" type="text" id="v-date" placeholder="Ex: 1972" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Placa</label>
-            <input class="form-input" type="text" id="v-plate" placeholder="Ex: PP-1234" />
-          </div>
+          <div class="form-group"><label class="form-label">Ano</label><input class="form-input" type="text" id="v-date" placeholder="Ex: 1972" /></div>
+          <div class="form-group"><label class="form-label">Placa</label><input class="form-input" type="text" id="v-plate" placeholder="Ex: PP-1234" /></div>
         </div>
       </div>
       <div class="modal-footer">
         <button class="btn-outline" onclick="fecharModalVeiculo()">Cancelar</button>
-        <button class="btn-red" onclick="salvarVeiculo()">
-          <i class="ti ti-check"></i> Salvar
-        </button>
+        <button class="btn-red" onclick="salvarVeiculo()"><i class="ti ti-check"></i> Salvar</button>
       </div>
     </div>
   </div>
@@ -228,51 +146,29 @@
     <div class="modal">
       <div class="modal-header">
         <span class="modal-title">Registrar serviço</span>
-        <button class="modal-close" onclick="fecharModalServico()">
-          <i class="ti ti-x"></i>
-        </button>
+        <button class="modal-close" onclick="fecharModalServico()"><i class="ti ti-x"></i></button>
       </div>
       <div class="modal-body">
         <input type="hidden" id="s-vehicle-id" />
-        <div class="form-group">
-          <label class="form-label">Título do serviço</label>
-          <input class="form-input" type="text" id="s-title" placeholder="Ex: Revisão geral" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Descrição</label>
-          <textarea class="form-textarea" id="s-desc" placeholder="Descreva o serviço..."></textarea>
+        <div class="form-group"><label class="form-label">Título</label><input class="form-input" type="text" id="s-title" placeholder="Ex: Revisão geral" /></div>
+        <div class="form-group"><label class="form-label">Descrição</label><textarea class="form-textarea" id="s-desc" placeholder="Descreva o serviço..."></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Data</label><input class="form-input" type="date" id="s-date" /></div>
+          <div class="form-group"><label class="form-label">Mão de obra (R$)</label><input class="form-input" type="number" id="s-labor" placeholder="0.00" /></div>
         </div>
         <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Data</label>
-            <input class="form-input" type="date" id="s-date" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Mão de obra (R$)</label>
-            <input class="form-input" type="number" id="s-labor" placeholder="0.00" />
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Valor das peças (R$)</label>
-            <input class="form-input" type="number" id="s-parts-val" placeholder="0.00" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Descrição das peças</label>
-            <input class="form-input" type="text" id="s-parts-desc" placeholder="Ex: Filtro de óleo" />
-          </div>
+          <div class="form-group"><label class="form-label">Valor das peças (R$)</label><input class="form-input" type="number" id="s-parts-val" placeholder="0.00" /></div>
+          <div class="form-group"><label class="form-label">Descrição das peças</label><input class="form-input" type="text" id="s-parts-desc" placeholder="Ex: Filtro de óleo" /></div>
         </div>
       </div>
       <div class="modal-footer">
         <button class="btn-outline" onclick="fecharModalServico()">Cancelar</button>
-        <button class="btn-red" onclick="salvarServico()">
-          <i class="ti ti-check"></i> Salvar
-        </button>
+        <button class="btn-red" onclick="salvarServico()"><i class="ti ti-check"></i> Salvar</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL CONFIRMAÇÃO (apagar) -->
+  <!-- CONFIRMAÇÃO -->
   <div class="confirm-overlay" id="confirm-overlay">
     <div class="confirm-box">
       <div class="confirm-icon" id="confirm-icon"></div>
