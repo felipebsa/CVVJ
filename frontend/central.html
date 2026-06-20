@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Central · Garagem Placa Preta</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-dot"></span>
+      <span>Garagem<br>Placa Preta</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item">
+        <i class="ti ti-home"></i> Home
+      </a>
+      <a href="central.html" class="nav-item active">
+        <i class="ti ti-layout-grid"></i> Central
+      </a>
+      <a href="status.html" class="nav-item">
+        <i class="ti ti-tool"></i> Status
+      </a>
+    </nav>
+    <div class="sidebar-footer">v1.0 · interno</div>
+  </aside>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <span class="page-title">Central</span>
+      <div class="topbar-right">
+        <input class="search-input" type="text" id="busca" placeholder="Buscar veículo..." oninput="filtrarCards()" />
+        <button class="btn-red" onclick="abrirModalVeiculo()">
+          <i class="ti ti-plus"></i> Novo veículo
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTEÚDO -->
+    <main class="content">
+
+      <!-- TOOLBAR DE MODO -->
+      <div class="mode-toolbar">
+        <span class="mode-label">Modo:</span>
+        <button class="btn-mode" id="btn-edit" onclick="setMode('edit')">
+          <i class="ti ti-pencil"></i> Editar
+        </button>
+        <button class="btn-mode" id="btn-del" onclick="setMode('del')">
+          <i class="ti ti-trash"></i> Apagar
+        </button>
+        <button class="btn-mode" id="btn-none" onclick="setMode('none')" style="color: var(--text-secundario);">
+          <i class="ti ti-x"></i> Cancelar
+        </button>
+      </div>
+
+      <!-- AVISO DE MODO -->
+      <div class="warning-bar" id="warning-bar">
+        <i class="ti ti-info-circle"></i>
+        <span id="warning-text"></span>
+      </div>
+
+      <!-- FILTROS -->
+      <div class="filters-bar">
+        <button class="filter-btn active" onclick="setFiltroAtivo('todos', this)">Todos</button>
+        <button class="filter-btn" onclick="setFiltroAtivo('ativos', this)">Ativos</button>
+        <button class="filter-btn" onclick="setFiltroAtivo('inativos', this)">Inativos</button>
+        <select class="filter-select" id="filtro-kind" onchange="filtrarCards()">
+          <option value="">Tipo: todos</option>
+          <option value="Carro">Carro</option>
+          <option value="Moto">Moto</option>
+          <option value="Caminhão">Caminhão</option>
+          <option value="Outros">Outros</option>
+        </select>
+      </div>
+
+      <!-- GRID DE VEÍCULOS -->
+      <div id="central-grid" style="
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 14px;
+      ">
+        <!-- Preenchido pelo JavaScript -->
+      </div>
+
+    </main>
+  </div>
+
+  <!-- MODAL FOTOS DO VEÍCULO -->
+  <div class="modal-overlay" id="modal-fotos">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-fotos-titulo">Fotos do veículo</span>
+        <button class="modal-close" onclick="fecharModalFotos()">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="fotos-grid" style="
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 10px;
+          margin-bottom: 14px;
+        ">
+          <!-- Fotos preenchidas pelo JS -->
+        </div>
+        <!-- Upload nova foto -->
+        <div style="border-top: 1px solid var(--marrom-borda); padding-top: 14px;">
+          <div class="form-group">
+            <label class="form-label">Adicionar foto (caminho)</label>
+            <div style="display: flex; gap: 8px;">
+              <input class="form-input" type="text" id="nova-foto-path" placeholder="Ex: /images/opala_frente.jpg" />
+              <button class="btn-red" onclick="adicionarFoto()">
+                <i class="ti ti-plus"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="abrirModalServico()">
+          <i class="ti ti-tool"></i> Registrar serviço
+        </button>
+        <button class="btn-outline" onclick="fecharModalFotos()">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL EDITAR VEÍCULO -->
+  <div class="modal-overlay" id="modal-editar">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">Editar veículo</span>
+        <button class="modal-close" onclick="fecharModalEditar()">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-id" />
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Modelo</label>
+            <input class="form-input" type="text" id="edit-model" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tipo</label>
+            <select class="form-select" id="edit-kind">
+              <option value="Carro">Carro</option>
+              <option value="Moto">Moto</option>
+              <option value="Caminhão">Caminhão</option>
+              <option value="Outros">Outros</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Ano</label>
+            <input class="form-input" type="text" id="edit-date" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Placa</label>
+            <input class="form-input" type="text" id="edit-plate" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="fecharModalEditar()">Cancelar</button>
+        <button class="btn-red" onclick="salvarEdicao()">
+          <i class="ti ti-check"></i> Salvar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL NOVO VEÍCULO -->
+  <div class="modal-overlay" id="modal-veiculo">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">Novo veículo</span>
+        <button class="modal-close" onclick="fecharModalVeiculo()">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Modelo</label>
+            <input class="form-input" type="text" id="v-model" placeholder="Ex: Opala" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tipo</label>
+            <select class="form-select" id="v-kind">
+              <option value="Carro">Carro</option>
+              <option value="Moto">Moto</option>
+              <option value="Caminhão">Caminhão</option>
+              <option value="Outros">Outros</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Ano</label>
+            <input class="form-input" type="text" id="v-date" placeholder="Ex: 1972" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Placa</label>
+            <input class="form-input" type="text" id="v-plate" placeholder="Ex: PP-1234" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="fecharModalVeiculo()">Cancelar</button>
+        <button class="btn-red" onclick="salvarVeiculo()">
+          <i class="ti ti-check"></i> Salvar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL REGISTRAR SERVIÇO -->
+  <div class="modal-overlay" id="modal-servico">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">Registrar serviço</span>
+        <button class="modal-close" onclick="fecharModalServico()">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="s-vehicle-id" />
+        <div class="form-group">
+          <label class="form-label">Título do serviço</label>
+          <input class="form-input" type="text" id="s-title" placeholder="Ex: Revisão geral" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Descrição</label>
+          <textarea class="form-textarea" id="s-desc" placeholder="Descreva o serviço..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Data</label>
+            <input class="form-input" type="date" id="s-date" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mão de obra (R$)</label>
+            <input class="form-input" type="number" id="s-labor" placeholder="0.00" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Valor das peças (R$)</label>
+            <input class="form-input" type="number" id="s-parts-val" placeholder="0.00" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Descrição das peças</label>
+            <input class="form-input" type="text" id="s-parts-desc" placeholder="Ex: Filtro de óleo" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="fecharModalServico()">Cancelar</button>
+        <button class="btn-red" onclick="salvarServico()">
+          <i class="ti ti-check"></i> Salvar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL CONFIRMAÇÃO (apagar) -->
+  <div class="confirm-overlay" id="confirm-overlay">
+    <div class="confirm-box">
+      <div class="confirm-icon" id="confirm-icon"></div>
+      <div class="confirm-title" id="confirm-title"></div>
+      <div class="confirm-sub" id="confirm-sub"></div>
+      <div class="confirm-btns">
+        <button class="confirm-btn confirm-cancel" onclick="fecharConfirm()">Cancelar</button>
+        <button class="confirm-btn confirm-ok" id="confirm-ok" onclick="confirmarAcao()">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

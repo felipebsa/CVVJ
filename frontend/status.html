@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Status · Garagem Placa Preta</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-dot"></span>
+      <span>Garagem<br>Placa Preta</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item">
+        <i class="ti ti-home"></i> Home
+      </a>
+      <a href="central.html" class="nav-item">
+        <i class="ti ti-layout-grid"></i> Central
+      </a>
+      <a href="status.html" class="nav-item active">
+        <i class="ti ti-tool"></i> Status
+      </a>
+    </nav>
+    <div class="sidebar-footer">v1.0 · interno</div>
+  </aside>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <span class="page-title">Status de serviços</span>
+      <div class="topbar-right">
+        <button class="btn-red" onclick="abrirModalServico()">
+          <i class="ti ti-plus"></i> Novo serviço
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTEÚDO -->
+    <main class="content">
+
+      <!-- FILTROS -->
+      <div class="filters-bar">
+        <button class="filter-btn active" onclick="setFiltroStatus('todos', this)">Todos</button>
+        <button class="filter-btn" onclick="setFiltroStatus('pendente', this)">Pendentes</button>
+        <button class="filter-btn" onclick="setFiltroStatus('concluido', this)">Concluídos</button>
+        <select class="filter-select" id="filtro-veiculo" onchange="filtrarTabela()">
+          <option value="">Veículo: todos</option>
+          <!-- Preenchido pelo JS -->
+        </select>
+      </div>
+
+      <!-- TABELA -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Veículo</th>
+              <th>Serviço</th>
+              <th>Data</th>
+              <th>Mão de obra</th>
+              <th>Peças</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-servicos">
+            <!-- Preenchido pelo JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- MODAL EDITAR SERVIÇO -->
+  <div class="modal-overlay" id="modal-editar-servico">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">Editar serviço</span>
+        <button class="modal-close" onclick="fecharModalEditarServico()">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="es-id" />
+        <div class="form-group">
+          <label class="form-label">Título do serviço</label>
+          <input class="form-input" type="text" id="es-title" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Descrição</label>
+          <textarea class="form-textarea" id="es-desc"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Data</label>
+            <input class="form-input" type="date" id="es-date" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mão de obra (R$)</label>
+            <input class="form-input" type="number" id="es-labor" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Valor das peças (R$)</label>
+            <input class="form-input" type="number" id="es-parts-val" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Descrição das peças</label>
+            <input class="form-input" type="text" id="es-parts-desc" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="form-select" id="es-finish">
+            <option value="false">Pendente</option>
+            <option value="true">Concluído</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="fecharModalEditarServico()">Cancelar</button>
+        <button class="btn-red" onclick="salvarEdicaoServico()">
+          <i class="ti ti-check"></i> Salvar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL NOVO SERVIÇO -->
+  <div class="modal-overlay" id="modal-servico">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">Novo serviço</span>
+        <button class="modal-close" onclick="fecharModalServico()">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Veículo</label>
+          <select class="form-select" id="s-vehicle-id">
+            <option value="">Selecione um veículo</option>
+            <!-- Preenchido pelo JS -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Título do serviço</label>
+          <input class="form-input" type="text" id="s-title" placeholder="Ex: Revisão geral" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Descrição</label>
+          <textarea class="form-textarea" id="s-desc" placeholder="Descreva o serviço..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Data</label>
+            <input class="form-input" type="date" id="s-date" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mão de obra (R$)</label>
+            <input class="form-input" type="number" id="s-labor" placeholder="0.00" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Valor das peças (R$)</label>
+            <input class="form-input" type="number" id="s-parts-val" placeholder="0.00" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Descrição das peças</label>
+            <input class="form-input" type="text" id="s-parts-desc" placeholder="Ex: Filtro de óleo" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="fecharModalServico()">Cancelar</button>
+        <button class="btn-red" onclick="salvarServico()">
+          <i class="ti ti-check"></i> Salvar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIRMAÇÃO APAGAR SERVIÇO -->
+  <div class="confirm-overlay" id="confirm-overlay">
+    <div class="confirm-box">
+      <div class="confirm-icon">
+        <i class="ti ti-trash" style="color: var(--vermelho); font-size: 32px;"></i>
+      </div>
+      <div class="confirm-title">Apagar serviço?</div>
+      <div class="confirm-sub">Essa ação não pode ser desfeita.</div>
+      <div class="confirm-btns">
+        <button class="confirm-btn confirm-cancel" onclick="fecharConfirm()">Cancelar</button>
+        <button class="confirm-btn confirm-ok" id="confirm-ok" style="background: var(--vermelho);" onclick="confirmarApagar()">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
