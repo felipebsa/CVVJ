@@ -1,6 +1,7 @@
 from database import Base, engine
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 #routers
 from routes.vehicle import router as vehicle_router
@@ -14,6 +15,7 @@ from models.vehicle_images import Images
 
 app = FastAPI()
 Base.metadata.create_all(bind=engine)
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 #settings Cors
 app.add_middleware(

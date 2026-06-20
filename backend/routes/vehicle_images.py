@@ -6,6 +6,7 @@ from models.vehicle_images import Images
 from schemas.vehicle_images import SchemaVehicle_Image
 from database import get_db
 import uuid
+import os
 
 router = APIRouter()
 
@@ -49,6 +50,11 @@ def delete_image(id: int, db: Session = Depends(get_db)):
     db_image = db.execute(query).scalars().first()
     if db_image is None:
         raise HTTPException(status_code=404, detail="not found id")
+    
+    # remove file in disk
+    if os.path.exists(db_image.image_path):
+        os.remove(db_image.image_path)
+    
     db.delete(db_image)
     db.commit()
     return {"message": "successful delete_image"}
