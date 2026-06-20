@@ -23,10 +23,10 @@ def get_image(id: int, db: Session = Depends(get_db)):
 @router.get("/vehicle_images/vehicle/{id}")
 def get_all_images(id: int, db: Session = Depends(get_db)):
     query = select(Images).where(Images.vehicle_id==id)
-    db_image = db.execute(query).scalars().all()
-    if not db_image:
+    db_images = db.execute(query).scalars().all()
+    if not db_images:
         raise HTTPException(status_code=404, detail="not found vehicle id")
-    return {"message": db_image}
+    return {"message": db_images}
 
 @router.post("/vehicle_images/register")
 def create_image(images: SchemaVehicle_Image, db: Session = Depends(get_db)):
