@@ -5,6 +5,7 @@ from models.vehicle import Vehicle
 from models.vehicle_images import Images
 from schemas.vehicle_images import SchemaVehicle_Image
 from database import get_db
+import uuid
 
 router = APIRouter()
 
@@ -56,8 +57,9 @@ def delete_image(id: int, db: Session = Depends(get_db)):
 
 @router.post("/vehicle_images/upload/{vehicle_id}")
 async def upload_image(vehicle_id: int, file: UploadFile = File(), db: Session = Depends(get_db)):
+    unique_name = f"{uuid.uuid4()}_{file.filename}"
     contents = await file.read()
-    with open(f"uploads/{file.filename}", "wb") as f:
+    with open(f"uploads/{unique_name}", "wb") as f:
         f.write(contents)
     query = select(Vehicle).where(Vehicle.vehicle_id==vehicle_id)
     get_query = db.execute(query).scalars().first()
@@ -65,7 +67,7 @@ async def upload_image(vehicle_id: int, file: UploadFile = File(), db: Session =
         raise HTTPException(status_code=404, detail="not found vehicle id")
     db_image = Images(
         vehicle_id = vehicle_id,
-        image_path = f"uploads/{file.filename}"
+        image_path = f"uploads/{unique_name}"
     )
     db.add(db_image)
     db.commit()
