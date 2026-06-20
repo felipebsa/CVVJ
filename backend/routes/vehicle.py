@@ -27,6 +27,14 @@ def get_vehicle_by_active(active: bool, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="not vehicles actives")
     return {"message": db_vehicles}
 
+@router.get("/vehicles/all/")
+def get_vehicle_by_active(db: Session = Depends(get_db)):
+    query = select(Vehicle)
+    db_vehicles = db.execute(query).scalars().all()
+    if not db_vehicles:
+        raise HTTPException(status_code=404, detail="not register vehicles")
+    return {"message": db_vehicles}
+
 @router.post("/vehicles/register")
 def create_vehicle(vehicle: VehicleSchema, db: Session = Depends(get_db)):
     db_vehicle = Vehicle(
