@@ -20,12 +20,28 @@ def get_service(id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="service id not found")
     return {"message": db_service}
 
+@router.get("/services")
+def get_all_services(db: Session = Depends(get_db)):
+    query = select(Service)
+    db_services = db.execute(query).scalars().all()
+    if not db_services:
+        raise HTTPException(status_code=404, detail="not services register")
+    return {"message": db_services}
+
 @router.get("/services/finish/{finish}")
 def get_finish_services(finish: bool, db: Session = Depends(get_db)):
     query = select(Service).where(Service.finish==finish)
     db_services = db.execute(query).scalars().all()
     if not db_services:
         raise HTTPException(status_code=404, detail="no have finish services")
+    return {"message": db_services}
+
+@router.get("/services/vehicle/{id}")
+def get_services_by_vehicle(id: int, db: Session = Depends(get_db)):
+    query = select(Service).where(Service.vehicle_id==id)
+    db_services = db.execute(query).scalars().all()
+    if not db_services:
+        raise HTTPException(status_code=404, detail="not found vehicle id")
     return {"message": db_services}
 
 @router.post("/services/register")
