@@ -10,6 +10,16 @@ C.V.V.J is a system built to organize and manage a collection of vintage vehicle
 
 ---
 
+## Features
+
+- Vehicle Management
+- Service History
+- Image Upload
+- Active/Inactive Status
+- REST API
+
+---
+
 ## Project Structure
 
 ```
